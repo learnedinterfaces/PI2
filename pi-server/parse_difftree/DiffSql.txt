@@ -1,0 +1,135 @@
+root    : query EOF
+query    : SINGLE(select_cores) OPT(orderby) OPT(limit)
+select_cores   : MULTI(select_core,compound_op)
+select_core    : SINGLE(select_clause) OPT(from_clause) OPT(where_clause) OPT(gb_clause)
+select_clause  : SELECT OPT(top_or_distinct) SINGLE(select_results)
+top_or_distinct : SINGLE(top_clause) | distinct
+top_clause     : TOP SINGLE(number)
+select_results : MULTI(select_result,comma)
+select_result  : SINGLE(sel_res_all_star) | SINGLE(sel_res_tab_star) | SINGLE(sel_res_val) | SINGLE(sel_res_col)
+sel_res_tab_star : SINGLE(name) '.*'
+sel_res_all_star : STAR
+as_name : AS name
+sel_res_val    : SINGLE(expr) OPT(as_name)
+sel_res_col    : SINGLE(col_ref) OPT(as_name)
+from_list      : MULTI(single_source,comma)
+single_join    : SINGLE(single_source) ON expr
+join_clause    : JOIN MULTI(single_join,join)
+join_source    : SINGLE(single_source) OPT(join_clause)
+from_source    : from_list | join_source
+from_clause    : FROM SINGLE(from_source)
+single_source  : ( SINGLE(source_func) | SINGLE(source_table) | SINGLE(source_subq) )
+source_table   : name as_name ?
+source_subq    : '(' query ')' as_name ?
+source_func    : function as_name ?
+and_or         : and | or
+where_clause   : WHERE MULTI(expr,and_or)
+gb_clause      : GROUP BY SINGLE(group_clause) OPT(having_clause)
+group_clause   : MULTI(grouping_term,comma)
+grouping_term  : SINGLE(expr)
+having_clause  : HAVING MULTI(expr,and)
+orderby        : ORDER BY MULTI(ordering_term,comma)
+asc_desc : ASC|DESC
+ordering_term  : SINGLE(expr) OPT(asc_desc)
+limit          : LIMIT SINGLE(expr)
+table_dot : name '.'
+col_ref        : table_dot ? name
+expr     : SINGLE(btwnexpr) | SINGLE(biexpr) | SINGLE(unexpr) | SINGLE(value) | SINGLE(source_subq)
+btwnexpr : SINGLE(value) BETWEEN SINGLE(value) AND SINGLE(value)
+biexpr   : SINGLE(value) SINGLE(binaryop_no_andor) SINGLE(expr)
+unexpr   : SINGLE(unaryop) SINGLE(expr)
+value    : SINGLE(parenval) | SINGLE(number) | SINGLE(boolean) | SINGLE(function) | SINGLE(col_ref) | SINGLE(string) | SINGLE(name) | SINGLE(domain) | SINGLE(range)
+domain   : '$' col_ref
+range    : '[' number ',' number ']'
+parenval : '(' SINGLE(expr) ')'
+function : SINGLE(name) '(' OPT(arg_list) ')'
+arg_list : MULTI(expr,comma) | sel_res_all_star
+boolean  : 'true' | 'false'
+compound_op : 'UNION' | 'union'
+binaryop : '+' | '-' | STAR | '/' | '==' | '=' | '<>' | '!=' | '<=' | '>=' | '<' | '>' | LIKE | IN | and_or
+binaryop_no_andor : '+' | '-' | STAR | '/' | '==' | '=' | '<>' | '!=' | '<=' | '>=' | '<' | '>' | LIKE | IN
+unaryop  : '+' | '-' | NOT
+string : STRING
+name : NAME
+number : NUMBER
+comma : COMMA
+and : AND
+or  : OR
+join : JOIN
+distinct : DISTINCT
+STAR : '*'
+ADD : ('ADD' | 'add')
+ALL : ('ALL' | 'all')
+ALTER : ('ALTER' | 'alter')
+AND : ('AND' | 'and')
+AS : ('AS' | 'as')
+ASC : ('ASC' | 'asc')
+BETWEEN : ('BETWEEN' | 'between')
+BY : ('BY' | 'by')
+CAST : ('CAST' | 'cast')
+COLUMN : ('COLUMN' | 'column')
+DESC : ('DESC' | 'desc')
+DISTINCT : ('DISTINCT' | 'distinct')
+TOP : ('TOP' | 'top')
+E : 'E'
+COMMA : ','
+ESCAPE  : ('ESCAPE' | 'escape')
+EXCEPT  : ('EXCEPT' | 'except')
+EXISTS  : ('EXISTS' | 'exists')
+EXPLAIN  : ('EXPLAIN' | 'explain')
+EVENT  : ('EVENT' | 'event')
+FORALL  : ('FORALL' | 'forall')
+FROM  : ('FROM' | 'from')
+GLOB  : ('GLOB' | 'glob')
+GROUP  : ('GROUP' | 'group')
+HAVING  : ('HAVING' | 'having')
+IN  : ('IN' | 'in')
+INNER  : ('INNER' | 'inner')
+INSERT  : ('INSERT' | 'insert')
+INTERSECT  : ('INTERSECT' | 'intersect')
+INTO  : ('INTO' | 'into')
+IS  : ('IS' | 'is')
+ISNULL  : ('ISNULL' | 'isnull')
+JOIN  : ('JOIN' | 'join')
+KEY  : ('KEY' | 'key')
+LEFT  : ('LEFT' | 'left')
+LIKE  : ('LIKE' | 'like')
+LIMIT  : ('LIMIT' | 'limit')
+MATCH  : ('MATCH' | 'match')
+NO  : ('NO' | 'no')
+NOT  : ('NOT' | 'not')
+NOTNULL  : ('NOTNULL' | 'notnull')
+NULL  : ('NULL' | 'null')
+OF  : ('OF' | 'of')
+OFFSET  : ('OFFSET' | 'offset')
+ON  : ('ON' | 'on')
+OR  : ('OR' | 'or')
+ORDER  : ('ORDER' | 'order')
+OUTER  : ('OUTER' | 'outer')
+PRIMARY  : ('PRIMARY' | 'primary')
+QUERY  : ('QUERY' | 'query')
+RAISE  : ('RAISE' | 'raise')
+REFERENCES  : ('REFERENCES' | 'references')
+REGEXP  : ('REGEXP' | 'regexp')
+RENAME  : ('RENAME' | 'rename')
+REPLACE  : ('REPLACE' | 'replace')
+RETURN  : ('RETURN' | 'return')
+ROW  : ('ROW' | 'row')
+SAVEPOINT  : ('SAVEPOINT' | 'savepoint')
+SELECT  : ('SELECT' | 'select')
+SET  : ('SET' | 'set')
+TABLE  : ('TABLE' | 'table')
+TEMP  : ('TEMP' | 'temp')
+TEMPORARY  : ('TEMPORARY' | 'temporary')
+THEN  : ('THEN' | 'then')
+TO  : ('TO' | 'to')
+UNION  : ('UNION' | 'union')
+USING  : ('USING' | 'using')
+VALUES  : ('VALUES' | 'values')
+VIRTUAL  : ('VIRTUAL' | 'virtual')
+WITH  : ('WITH' | 'with')
+WHERE  : ('WHERE' | 'where')
+NUMBER   : [0-9]* '.'? [0-9]+
+STRING   : '\'' ( ~'\'' | '\'\'')* '\''
+NAME       : [_a-zA-Z][_a-zA-Z0-9]*
+WS : [ \t\r\n]+ -> skip

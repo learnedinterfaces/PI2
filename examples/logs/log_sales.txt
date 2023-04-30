@@ -1,0 +1,9 @@
+select city, product_line, sum(total) from sales as ss group by city, product_line having sum(total) >= ( select max(t) from ( select sum(total) as t from sales as s where s.city = ss.city group by s.city, s.product_line ) )
+select city, product_line, sum(total) from sales as ss where ss.date between '2019-01-05' and '2019-03-10' group by city, product_line having sum(total) >= ( select max(t) from ( select sum(total) as t from sales as s where s.city = ss.city and s.date between '2019-01-05' and '2019-03-10' group by s.city, s.product_line ) )
+select city, product_line, sum(total) from sales as ss where ss.date between '2019-01-25' and '2019-02-15' group by city, product_line having sum(total) >= ( select max(t) from ( select sum(total) as t from sales as s where s.city = ss.city and s.date between '2019-01-25' and '2019-02-15' group by s.city, s.product_line ) )
+select date, sum(total) from sales where branch = 'A' and product_line = 'Health and beauty' group by date
+select date, sum(total) from sales where branch = 'B' and product_line = 'Electronic accessories' group by date
+select date, sum(total) from sales where branch = 'C' and product_line = 'Home and lifestyle' group by date
+select date, sum(total) from sales where branch = 'A' and product_line = 'Sports and travel' group by date
+select date, sum(total) from sales where branch = 'B' and product_line = 'Food and beverages' group by date
+select date, sum(total) from sales where branch = 'C' and product_line = 'Fashion accessories' group by date

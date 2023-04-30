@@ -1,0 +1,6 @@
+select DISTINCT ra, dec from specObj where ra BETWEEN 213.2 and 213.6 AND dec BETWEEN -0.3 and -0.1
+select DISTINCT ra, dec from specObj where ra BETWEEN 213.4 and 214.2 AND dec BETWEEN -0.8 and -0.4
+select DISTINCT ra, dec from specObj where ra BETWEEN 213.1 and 213.7 AND dec BETWEEN -0.6 and -0.3
+SELECT DISTINCT gal.objID, gal.u, gal.g, gal.r, gal.i, gal.z, s.z, s.ra, s.dec FROM galaxy as gal, specObj as s WHERE s.bestObjID = gal.objID AND s.z BETWEEN 0.1362 and 0.141 AND  ra BETWEEN 213.2 and 213.6 AND dec BETWEEN -0.3 and -0.1
+SELECT DISTINCT gal.objID, gal.u, gal.g, gal.r, gal.i, gal.z, s.z, s.ra, s.dec FROM galaxy as gal, specObj as s WHERE s.bestObjID = gal.objID AND s.z BETWEEN 0.1362 and 0.141 AND ra BETWEEN 213.4 and 214.2 AND dec BETWEEN -0.8 and -0.4
+SELECT DISTINCT gal.objID, gal.u, gal.g, gal.r, gal.i, gal.z, s.z, s.ra, s.dec FROM galaxy as gal, specObj as s WHERE s.bestObjID = gal.objID AND s.z BETWEEN 0.1362 and 0.141 AND ra BETWEEN 213.1 and 213.7 AND dec BETWEEN -0.6 and -0.3

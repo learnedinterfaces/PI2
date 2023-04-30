@@ -1,0 +1,152 @@
+query    = ws select_cores orderby? limit? ws ";"? ws
+select_cores   = select_core (compound_op select_core)*
+select_core    = select_clause from_clause join_clause where_clause gb_clause
+select_clause  = SELECT (((top_clause/distinct_clause)? wsp select_results) / (wsp select_results))
+select_results = select_result (ws "," ws select_result)*
+select_result  = sel_res_all_star / sel_res_tab_star / sel_res_val / sel_res_col 
+sel_res_tab_star = name ".*"
+sel_res_all_star = "*"
+sel_res_val    = expr (AS wsp name)?
+sel_res_col    = col_ref (AS wsp name)
+top_clause = wsp ( "top" / "TOP") ws number 
+distinct_clause = wsp ("DISTINCT" / "distinct")
+join_clause    = (join_type? JOIN wsp join_source (ON wsp biexpr)?)?
+
+from_clause    = (FROM ws join_source)?
+join_source    = single_source (ws "," ws single_source)*
+single_source  = source_func / source_table / source_subq 
+source_table   = table_name (AS wsp name)?
+source_subq    = lparen ws query ws rparen (AS wsp name)?
+source_func    = function (AS wsp name)?
+
+where_clause   = (WHERE wsp where_list)?
+where_list     = expr ((AND / OR) wsp expr)*
+
+gb_clause      = (GROUP BY group_clause having_clause?)?
+group_clause   = grouping_term (ws "," grouping_term)*
+grouping_term  = ws expr
+having_clause  = HAVING having_list
+having_list    = wsp expr (AND wsp expr)*
+
+orderby        = ORDER BY orderby_list
+orderby_list   = ordering_term (ws "," ordering_term)*
+ordering_term  = ws expr (ASC/DESC)?
+
+limit          = LIMIT wsp expr (OFFSET wsp expr)?
+
+col_ref        = (db_name "." (table_name ".")?)? column_name
+
+
+expr     = overexpr / listexpr / vbtwnexpr / isnullexpr / biexpr / unexpr / value / source_subq
+listexpr = lparen ws (expr (ws "," ws expr)*)? ws rparen
+overexpr = "row_number" lparen rparen wsp ("over" / "OVER") ws lparen ws rparen
+vbtwnexpr = value btwnexpr
+btwnexpr = BETWEEN wsp value AND wsp value
+isnullexpr = value IS NOT? NULL
+biexpr   = value ((wsp binary_text_op wsp) / (ws binary_nontext_op ws)) expr
+unexpr   = unaryop expr
+value    = parenval / 
+           number /
+           hex /
+           boolean /
+           function /
+           col_ref /
+           string /
+           attr
+parenval = lparen ws expr ws rparen
+function = fname lparen ws arg_list? ws rparen
+arg_list = arg_expr (ws "," ws arg_expr)*
+arg_expr = "*" / expr
+hex      = ~"0x[\dabcdeABCDE]+\s*"i
+number   = ~"[\+\-]?\d*\.?\d+"i
+string   = ~"([\"\'])(\\\\?.)*?\\1"i
+attr     = ~"\w[\w\d]*"i
+fname    = ~"\w[\w\d]*"i
+boolean  = "true" / "false"
+compound_op = "UNION" / "union"
+binary_nontext_op = "+" / "-" / "*" / "/" / "==" / "=" / "<>" / "!=" /
+           ">=" / "<=" / ">" / "<" / ">" 
+binary_text_op = "like"  / "LIKE" / "in" / "IN"
+lparen   = "("
+rparen   = ")"
+unaryop  = "+" / "-" / "not" / "NOT"
+ws       = ~"\s*"i
+wsp      = ~"\s+"i
+join_type = INNER / LEFT / RIGHT / OUTER
+
+name       = ~"[a-zA-Z]\w*"i /  ~"`[a-zA-Z][\w\.\-\_\:\*]*`"i / ~"\[[a-zA-Z][\w\.\-\_\:\*]*\]"i 
+table_name = name
+db_name    = name
+column_name = name
+
+ADD = wsp ("ADD" / "and")
+ALL = wsp ("ALL" / "all")
+ALTER = wsp ("ALTER" / "alter")
+AND = wsp ("AND" / "and")
+AS = wsp ("AS" / "as")
+ASC = wsp ("ASC" / "asc")
+BETWEEN = wsp ("BETWEEN" / "between")
+BY = wsp ("BY" / "by")
+CAST = wsp ("CAST" / "cast")
+COLUMN = wsp ("COLUMN" / "column")
+DESC = wsp ("DESC" / "distinct")
+DISTINCT = wsp ("DISTINCT" / "distinct")
+E = "E"
+ESCAPE  = wsp ("ESCAPE" / "escape")
+EXCEPT  = wsp ("EXCEPT" / "except")
+EXISTS  = wsp ("EXISTS" / "exists")
+EXPLAIN  = ws ("EXPLAIN" / "explain")
+EVENT  = ws ("EVENT" / "event")
+FORALL  = wsp ("FORALL" / "forall")
+FROM  = wsp ("FROM" / "from")
+GLOB  = wsp ("GLOB" / "glob")
+GROUP  = wsp ("GROUP" / "group")
+HAVING  = wsp ("HAVING" / "having")
+IN  = wsp ("IN" / "in")
+INNER  = wsp ("INNER" / "inner")
+INSERT  = ws ("INSERT" / "insert")
+INTERSECT  = wsp ("INTERSECT" / "intersect")
+INTO  = wsp ("INTO" / "into")
+IS  = wsp ("IS" / "is")
+ISNULL  = wsp ("ISNULL" / "isnull")
+JOIN  = wsp ("JOIN" / "join")
+KEY  = wsp ("KEY" / "key")
+LEFT  = wsp ("LEFT" / "left")
+LIKE  = wsp ("LIKE" / "like")
+LIMIT  = wsp ("LIMIT" / "limit")
+MATCH  = wsp ("MATCH" / "match")
+NO  = wsp ("NO" / "no")
+NOT  = wsp ("NOT" / "not")
+NOTNULL  = wsp ("NOTNULL" / "notnull")
+NULL  = wsp ("NULL" / "null")
+OF  = wsp ("OF" / "of")
+OFFSET  = wsp ("OFFSET" / "offset")
+ON  = wsp ("ON" / "on")
+OR  = wsp ("OR" / "or")
+ORDER  = wsp ("ORDER" / "order")
+OUTER  = wsp ("OUTER" / "outer")
+PRIMARY  = wsp ("PRIMARY" / "primary")
+QUERY  = wsp ("QUERY" / "query")
+RAISE  = wsp ("RAISE" / "raise")
+RIGHT = wsp ("RIGHT" / "right")
+REFERENCES  = wsp ("REFERENCES" / "references")
+REGEXP  = wsp ("REGEXP" / "regexp")
+RENAME  = wsp ("RENAME" / "rename")
+REPLACE  = ws ("REPLACE" / "replace")
+RETURN  = wsp ("RETURN" / "return")
+ROW  = wsp ("ROW" / "row")
+SAVEPOINT  = wsp ("SAVEPOINT" / "savepoint")
+SELECT  = ws ("SELECT" / "select")
+SET  = wsp ("SET" / "set")
+TABLE  = wsp ("TABLE" / "table")
+TEMP  = wsp ("TEMP" / "temp")
+TEMPORARY  = wsp ("TEMPORARY" / "temporary")
+THEN  = wsp ("THEN" / "then")
+TO  = wsp ("TO" / "to")
+UNION  = wsp ("UNION" / "union")
+USING  = wsp ("USING" / "using")
+VALUES  = wsp ("VALUES" / "values")
+VIRTUAL  = wsp ("VIRTUAL" / "virtual")
+WITH  = wsp ("WITH" / "with")
+WHERE  = wsp ("WHERE" / "where")
+

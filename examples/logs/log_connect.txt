@@ -1,0 +1,3 @@
+SELECT Horsepower, Displacement, Idx FROM cars
+SELECT Miles_per_Gallon, Displacement, (Idx in (1, 2)) as highlight FROM cars
+SELECT Miles_per_Gallon, Displacement, (Idx in (200, 202, 204)) as highlight FROM cars

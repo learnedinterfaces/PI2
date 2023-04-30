@@ -1,0 +1,9 @@
+select hour, count(idx) from flights group by hour
+select hour, count(idx) from flights where bin_delay between 0 and 50 and bin_distance between 400 and 800 group by hour
+select hour, count(idx) from flights where bin_delay between 10 and 100 and bin_distance between 500 and 1000 group by hour
+select bin_delay, count(idx) from flights group by bin_delay
+select bin_delay, count(idx) from flights where hour between 10 and 16 and bin_distance between 400 and 800 group by bin_delay
+select bin_delay, count(idx) from flights where hour between 15 and 20 and bin_distance between 200 and 700 group by bin_delay
+select bin_distance, count(idx) from flights group by bin_distance
+select bin_distance, count(idx) from flights where hour between 10 and 16 and bin_delay between 0 and 50 group by bin_distance
+select bin_distance, count(idx) from flights where hour between 8 and 15 and bin_delay between 20 and 60 group by bin_distance

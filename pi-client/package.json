@@ -1,0 +1,48 @@
+{
+  "name": "pi-client",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "unpkg": "dist/pi-client.min.js",
+  "module": "src/pi-client.js",
+  "files": [
+    "dist/**/*.js",
+    "src/**/*.js"
+  ],
+  "scripts": {
+    "build-library": "tsc",
+    "watch-library": "tsc -w",
+    "build": "rollup -c",
+    "watch": "rollup -w -c",
+    "test": "rollup -c; tape 'test/**/*-test.js'"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.1",
+    "alasql": "^0.6.0",
+    "eslint": "6",
+    "jsdom": "15",
+    "nouislider": "14.6.3",
+    "path": "^0.12.7",
+    "ramda": "^0.27.0",
+    "rollup": "2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "5",
+    "tape": "4",
+    "typescript": "^4.6.2"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.5.13",
+    "alasql": "^0.6.0",
+    "jquery": "^3.6.0",
+    "jquery-ui": "^1.13.1",
+    "nouislider": "14.6.3",
+    "npm-run-all": "^4.1.5",
+    "ramda": "^0.27.0",
+    "vega": "^5.22.1",
+    "vega-embed": "^6.20.0",
+    "vega-lite": "^5.5.0",
+    "vega-lite-api": "^5.0.0"
+  }
+}

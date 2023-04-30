@@ -1,0 +1,7 @@
+  select Miles_per_Gallon, Cylinders from cars where Horsepower between 50 and 60
+  select Miles_per_Gallon, Cylinders from cars where Horsepower between 102 and 154
+  select Miles_per_Gallon, Cylinders from cars where Horsepower between 90 and 200
+  select Miles_per_Gallon, Cylinders from (SELECT * FROM cars WHERE Origin = 'USA') where Horsepower between 90 and 200
+  select Miles_per_Gallon, Cylinders from (SELECT * FROM cars WHERE Origin = 'Japan') where Horsepower between 90 and 200
+  select Miles_per_Gallon, Cylinders from (SELECT * FROM cars WHERE Origin = 'Europe') where Horsepower between 90 and 200
+  select Horsepower, count(1) as c from cars group by Horsepower

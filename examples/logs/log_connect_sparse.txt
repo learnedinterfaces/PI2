@@ -1,0 +1,3 @@
+SELECT Horsepower, Displacement, Idx FROM cars where Weight_in_lbs > 3500
+SELECT Miles_per_Gallon, Displacement, (Idx in (1, 2)) as highlight FROM cars where Weight_in_lbs > 3500
+SELECT Miles_per_Gallon, Displacement, (Idx in (196, 197, 198)) as highlight FROM cars where Weight_in_lbs > 3500

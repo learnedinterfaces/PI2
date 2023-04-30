@@ -1,0 +1,4 @@
+select Miles_per_Gallon, Horsepower from cars where Cylinders = 3
+select Miles_per_Gallon, Horsepower from cars where Cylinders = 4
+select Miles_per_Gallon, Horsepower from cars where Cylinders = 5 and Weight_in_lbs < 1000
+select Miles_per_Gallon, Horsepower from cars where Cylinders = 5 and Weight_in_lbs < 5000

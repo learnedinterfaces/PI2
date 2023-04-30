@@ -1,0 +1,13 @@
+select date, cases from covid where state='California'
+select date, cases from covid where state='Washington' and date>date('2021-06-21', '-30 days')
+select date, cases from covid where state='California' and date>date('2021-06-21', '-7 days')
+select date, deaths from covid where state='Washington'
+select date, deaths from covid where state='New Jersey'
+select date, deaths from covid where state='Virginia'
+select date, deaths from covid where state='Florida'
+select date, deaths from covid where state='Washington'
+select date, deaths from covid where state='New York'
+select date, deaths from covid where state='Washington' and date>date('2021-06-21', '-14 days')
+select date, deaths from covid where state='Washington' and date>date('2021-06-21', '-7 days')
+select date, deaths from covid where state='New York' and date>date('2021-06-21', '-7 days')
+select date, deaths from covid where state='Washington' and date>date('2021-06-21', '-7 days')

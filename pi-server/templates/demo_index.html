@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Precision Interfaces Demo</title>
+
+
+    <script src="./static/js/vega.5.7.2.js"></script>
+    <script src="./static/js/vega-lite.5.1.1.js"></script>
+    <script src="./static/js/vega-lite-api.js"></script>
+    <script src="./static/js/vega-embed.6.js"></script> 
+    <script src="./static/js/vega-tooltip.min.js"></script>
+    <script src="./static/js/jquery.min.js"></script>
+    <script src="./static/js/jquery-ui.min.js"></script>
+	<script src="./static/js/bootstrap.min.js"></script>
+    <script src="./static/js/socket.io.min.js"></script>
+	<script src="./static/js/popper.min.js"></script>
+    <script src="./static/js/alasql.0.6.js"></script>
+    <script src="./static/js/ramda.min.js"></script>
+    <script src="./static/js/mousetrap.min.js"></script>
+    <script src="./static/js/pi-client.js"> </script>
+
+	<link rel="stylesheet" href="./static/bootstrap.min.css">
+    <link rel="stylesheet" href="./static/nouislider.css" />
+    <link rel="stylesheet" href="./static/pi.css" />
+    <link rel="stylesheet" href="./static/jquery-ui.css">
+  <body>
+    <script>
+        var socket = io.connect('http://localhost:8000');
+        vl.register(vega, vegaLite, {
+            config: {
+              axis: { 
+                titleFontSize: 30,
+                labelFontSize: 30 
+              }
+            },
+            view: { renderer: "svg" }
+        });
+        var session = "demo-" + Date.now();
+        var workflow = pi.PIWorkflow(socket, session, { enableHelp: false });
+    </script>
+	</body>
+  </head>
+  <body>
+  <div style="text-align: center; width: 100%; display:block; font-size: 20pt; ">
+      PI-Client
+      <a href="#" onclick="runpi()" style="font-size: 14pt">Re-generate Interface</a>
+  </div>
+  <div class="row" style="width:90%; margin: auto;">
+      <div class="col-md-5" style="align-content: flex-start">
+          <div class="row" style="width: 100%">
+              <div class="col-md-12">
+                  <h3>Submit Queries</h3>
+                  <textarea id="logarea" class="mousetrap" rows="6" style="width:100%"
+                            placeholder="Type query"></textarea>
+                  <input type="button" onclick="submitQ()" value="submit" style="width: 100%"/>
+                  <label>
+                    <input id ="generalize_toggle" type="checkbox" >
+                        Generalize
+                  </label>
+              </div>
+          </div>
+          <div class="row" style="width: 100%">
+              <div class="col-md-12">
+                  <h3>Query Log</h3>
+                  <div id="log" style="width: 100%; "></div>
+              </div>
+          </div>
+          <div class="row" style="width: 100%">
+              <div class="col-md-12">
+                  <h3>Latest Query Results</h3>
+                  <table id="results" style="width:100%;"></table>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="row">
+              <div class="col-md-12">
+                  <h3>Interface Queries</h3>
+              </div>
+              <div class="col-md-12" style="align-content: flex-start">
+                  <div id="sql" style="width: 100%"></div>
+              </div>
+              <div class="col-md-12">
+                  <h3>Interface</h3>
+              </div>
+              <div class="col-md-12" style="align-content: flex-start">
+                  <div id="interface" style="width: 100%; "></div>
+              </div>
+          </div>
+      </div>
+  </div>
+    <script>
+      function resetInterface() {
+        var spec = document.getElementById("interface")
+        workflow.clear()
+        while (spec.firstChild) {
+          spec.removeChild(spec.firstChild);
+        }
+      }
+
+      function submitQ() {
+        var q = document.getElementById("logarea").value
+          var generalize = document.getElementById("generalize_toggle").checked
+          socket.emit("generalize",{"payload":generalize,"session":session})
+        socket.emit("runq", {"payload": q, "session": session})
+      }
+      function submitLog() {
+        var log = document.getElementById("logarea").value
+        socket.emit("log", {"payload": log, "session": session})
+      }
+
+      function runpi() {
+        resetInterface()
+        var q = document.getElementById("logarea").value
+        socket.emit("runpi", {"session": session})
+      }
+      socket.on("spec", (spec) => {
+        resetInterface();
+        workflow.init(spec, document.getElementById("interface"))
+      });
+      socket.on("preview", ({preview}) => {
+          let div = $("#preview").empty();
+          let regex = /(.*?)~\$(.*?)\$~(.*)/;
+
+          preview.forEach((q) => {
+              let preview_str = ""
+              while ((m = regex.exec(q)) != null) {
+                  m[2] = m[2].replace(/~\$/, "")
+                  m[2] = m[2].replace(/\$~/, "")
+                  m[1] = m[1].replace(/~\$/, "")
+                  m[1] = m[1].replace(/\$~/, "")
+                  preview_str += m[1] + "<span style='background-color: yellow;'>" + m[2] + "</span>"
+                  q = m[3]
+              }
+
+              if (q !== "")
+                  preview_str += q
+
+              preview_str = preview_str.replace(/~\$/, "")
+              preview_str = preview_str.replace(/\$~/, "")
+
+              div.append($(`<p style='width:100%'>${preview_str}</p>`))
+              console.log(preview_str)
+          })
+
+          div.show()
+          $("#default").hide()
+      })
+      socket.on("sql", ({sql}) => {
+          let div = $("#sql").empty();
+          let helpDiv = $("#default").empty();
+          let regex = /(.*?)~\$(.*?)\$~(.*)/;
+
+          sql.forEach((q) => {
+              let stripped_q = q.replaceAll(/~\$/g, "").replaceAll(/\$~/g, "")
+              div.append($(`<p style='width:100%'>${stripped_q}</p>`))
+              let preview_str = ""
+              while ((m = regex.exec(q)) != null) {
+                  m[2] = m[2].replace(/~\$/, "")
+                  m[2] = m[2].replace(/\$~/, "")
+                  m[1] = m[1].replace(/~\$/, "")
+                  m[1] = m[1].replace(/\$~/, "")
+                  preview_str += m[1] + "<span style='background-color: yellow;'>" + m[2] + "</span>"
+                  q = m[3]
+              }
+
+              if (q !== "")
+                  preview_str += q
+
+              preview_str = preview_str.replace(/~\$/, "")
+              preview_str = preview_str.replace(/\$~/, "")
+
+              helpDiv.append($(`<p style='width:100%'>${preview_str}</p>`))
+          })
+
+          helpDiv.show()
+          $("#preview").hide()
+      })
+      socket.on("log", (qs) => {
+        let log = $("#log").empty()
+        qs.forEach((q) => {
+          log.append($(`<p style='font-size: 12pt; width:100%'>${q}</p>`))
+        })
+      })
+      socket.on("table", ({rows, columns}) => {
+        let table = $("#results").empty();
+        let headertr = $("<tr/>")
+        table.append(headertr)
+              let body = $("<tbody/>")
+              table.append(body)
+        columns.map((c) => 
+          headertr.append($(`<th>${c}</th>`)))
+        rows.forEach((row) => {
+          let tr = $("<tr/>")
+          columns.map((c) => 
+            tr.append($(`<td>${row[c]}</td>`))
+          )
+          body.append(tr)
+        })
+      })
+
+      Mousetrap.bind("command+enter", submitQ)
+      Mousetrap.bind("/", (e) => {
+        $("#logarea").focus();
+        return (e.target.type == "textarea")
+      })
+      socket.emit("reset", {"session": session})
+    </script>
+  <style>
+             
+  </style>
+  </body>
+</html>

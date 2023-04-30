@@ -1,0 +1,2 @@
+select Horsepower, Miles_per_Gallon, Origin from cars where Horsepower between 50 and 100 and Miles_per_Gallon between 27 and 38
+select Horsepower, Miles_per_Gallon, Origin from cars where Horsepower between 60 and 120 and Miles_per_Gallon between 16 and 29.2

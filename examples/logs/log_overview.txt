@@ -1,0 +1,3 @@
+select date, price from sp500
+select date, price from sp500 where date >= '2001-01-01' and date <= '2003-01-01'
+select date, price from sp500 where date >= '2001-02-01' and date <= '2003-02-01'

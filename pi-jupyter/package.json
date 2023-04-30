@@ -1,0 +1,96 @@
+{
+  "name": "pi_jupyter",
+  "version": "0.1.0",
+  "description": "Integrating Precision Interfaces with Jupyter",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "homepage": "https://github.com/cudbg/pi",
+  "bugs": {
+    "url": "https://github.com/cudbg/pi/issues"
+  },
+  "license": "BSD-3-Clause",
+  "author": {
+    "name": "Jeff Tao",
+    "email": "jat2164@columbia.edu"
+  },
+  "files": [
+    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+    "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "style": "style/index.css",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cudbg/pi.git"
+  },
+  "scripts": {
+    "build": "jlpm run build:lib && jlpm run build:labextension",
+    "build:prod": "jlpm run clean && jlpm run build:lib && jlpm run build:labextension",
+    "build:labextension": "jupyter labextension build . && jupyter labextension enable .",
+    "build:labextension:dev": "jupyter labextension build --development True .",
+    "build:lib": "tsc",
+    "clean": "jlpm run clean:lib",
+    "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
+    "clean:labextension": "rimraf pi_jupyter/labextension",
+    "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
+    "eslint": "eslint . --ext .ts,.tsx --fix",
+    "eslint:check": "eslint . --ext .ts,.tsx",
+    "install:extension": "jlpm run build",
+    "watch": "run-p watch:src watch:labextension",
+    "watch:src": "tsc -w",
+    "watch:labextension": "jupyter labextension watch ."
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^3.1.0",
+    "@jupyterlab/apputils": "^3.2.1",
+    "@jupyterlab/docregistry": "^3.2.1",
+    "@jupyterlab/launcher": "^3.2.1",
+    "@jupyterlab/mainmenu": "^3.2.1",
+    "@jupyterlab/notebook": "^3.2.1",
+    "@jupyterlab/ui-components": "^3.2.1",
+    "@lumino/disposable": "^1.10.0",
+    "@lumino/widgets": "^1.29.0",
+    "@types/scheduler": "^0.16.2",
+    "react": "^17.0.2",
+    "react-spinners": "^0.11.0",
+    "run-p": "^0.0.0",
+    "socket.io-client": "^4.3.2",
+    "zustand": "^4.0.0-rc.1"
+  },
+  "devDependencies": {
+    "@jupyterlab/builder": "^3.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.1",
+    "rimraf": "^3.0.2",
+    "typescript": "~4.1.3"
+  },
+  "sideEffects": [
+    "style/*.css",
+    "style/index.js"
+  ],
+  "styleModule": "style/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "jupyterlab": {
+    "extension": true,
+    "outputDir": "pi_jupyter/labextension"
+  },
+  "jupyter-releaser": {
+    "hooks": {
+      "before-build-npm": [
+        "python -m pip install jupyterlab~=3.1",
+        "jlpm"
+      ]
+    }
+  }
+}

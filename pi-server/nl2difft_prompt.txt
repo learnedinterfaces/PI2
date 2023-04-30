@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS "states" (
+"state" TEXT,
+  "cases" REAL,
+  "geography" TEXT
+, "death" REAL );
+
+-- Using Structurally Parameterized SQL, answer the following questions for the tables provided above.
+
+-- What are the total covid cases or deaths across all the states of the U.S.?
+select state, sum(Any{cases|death}), geography from states group by state;
