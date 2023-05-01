@@ -107,26 +107,6 @@ export function Geoshape() {
       let iact = view.source_iact[0];
       let vegaview = view.vlview.view;
 
-      if (['SINGLE', 'MULTI'].includes(iact.type)) {
-        vegaview.addEventListener('mousemove', (event, item) => {
-          selectEventListener(vegaview, event)
-        })
-
-        vegaview.addEventListener('mouseover', (event, item) => {
-          if (iact.type === "SINGLE") {
-            singleHint()
-          }
-          if (iact.type === "MULTI") {
-            multiHint()
-          }
-        })
-
-        vegaview.addEventListener('mouseout', (event, item) => {
-          document.body.style.cursor = 'default'
-          emptyInteractionHint()
-        })
-      }
-
       vegaview.addDataListener("source_0", (event, item) => { });
       vegaview.addEventListener('mouseup', (event, item) => {
         if (iact.type === "SINGLE") {

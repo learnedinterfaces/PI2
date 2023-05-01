@@ -102,7 +102,7 @@ export function Point() {
       if (iact.type === "SINGLE") 
           sel = vl.selectSingle().nearest(true);
       else if (iact.type === "MULTI") 
-          sel = vl.selectMulti().toggle(false).nearest(true);
+          sel = vl.selectMulti().nearest(true);
       else if (iact.type === "BRUSHX") 
           sel = vl.selectInterval().encodings(['x']);
       else if (iact.type === "BRUSHY") 
@@ -140,82 +140,6 @@ export function Point() {
       if (view.source_iact.length == 0) return;
       let iact = view.source_iact[0];
       let vegaview = view.vlview.view;
-
-      if (["BRUSHX", "BRUSHY", "BRUSHXY"].includes(iact.type)) {
-        vegaview.addEventListener('mousemove', (event, item) => {
-          brushEventListener(vegaview, event, iact)
-        })
-
-        vegaview.addEventListener('mouseover', (event, item) => {
-          if (iact.type === "BRUSHX") {
-            brushXHint()
-          }
-          else if (iact.type === "BRUSHY") {
-            brushYHint()
-          }
-          else if (iact.type === "BRUSHXY") {
-            brushXYHint()
-          }
-        })
-
-        vegaview.addEventListener('mouseout', (event, item) => {
-          document.body.style.cursor = 'default'
-          emptyInteractionHint()
-        })
-      }
-
-      else if (['SINGLE', 'MULTI'].includes(iact.type)) {
-        vegaview.addEventListener('mousemove', (event, item) => {
-          selectEventListener(vegaview, event)
-        })
-
-        vegaview.addEventListener('mouseover', (event, item) => {
-          if (iact.type === "SINGLE") {
-            singleHint()
-          }
-          if (iact.type === "MULTI") {
-            multiHint()
-          }
-        })
-
-        vegaview.addEventListener('mouseout', (event, item) => {
-          document.body.style.cursor = 'default'
-          emptyInteractionHint()
-        })
-      }
-
-      else if (["PANX", "PANY", "PANXY", "ZOOMX", "ZOOMY", "ZOOMXY"].includes(iact.type)) {
-        // changing to pointer needs work...do we expand the area so that we can have more hits? kind of works.
-        vegaview.addEventListener('mousemove', (event, item) => {
-          panZoomEventListener(vegaview, event)
-        })
-
-        vegaview.addEventListener('mouseover', (event, item) => {
-          if (iact.type === "PANX") {
-            panXHint()
-          }
-          if (iact.type === "PANY") {
-            panYHint()
-          }
-          if (iact.type === "PANXY") {
-            panXYHint()
-          }
-          if (iact.type === "ZOOMX") {
-            zoomXHint()
-          }
-          if (iact.type === "ZOOMY") {
-            zoomYHint()
-          }
-          if (iact.type === "ZOOMXY") {
-            zoomXYHint()
-          }
-        })
-
-        vegaview.addEventListener('mouseout', (event, item) => {
-          emptyInteractionHint()
-          document.body.style.cursor = 'default'
-        })
-      }
 
       vegaview.addDataListener("source_0", (event, item) => { });
 

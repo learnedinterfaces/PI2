@@ -238,4 +238,6 @@ def search_difftree(clusters, catalog, sample_outputs, parse_queries, db, pre_ge
     if score2[0] > score[0]:
         trees = trees2
         score = score2
+    rule_list.append(Merge)
+    rule_list.append(Split)
     return trees, -score[0]

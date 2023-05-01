@@ -109,49 +109,6 @@ export function Bar() {
       let iact = view.source_iact[0];
       let vegaview = view.vlview.view;
 
-      if (["BRUSHX", "BRUSHY", "BRUSHXY"].includes(iact.type)) {
-        vegaview.addEventListener('mousemove', (event, item) => {
-          brushEventListener(vegaview, event, iact)
-        })
-
-        vegaview.addEventListener('mouseover', (event, item) => {
-          if (iact.type === "BRUSHX") {
-            brushXHint()
-          }
-          else if (iact.type === "BRUSHY") {
-            brushYHint()
-          }
-          else if (iact.type === "BRUSHXY") {
-            brushXYHint()
-          }
-        })
-
-        vegaview.addEventListener('mouseout', (event, item) => {
-          document.body.style.cursor = 'default'
-          emptyInteractionHint()
-        })
-      }
-
-      else if (['SINGLE', 'MULTI'].includes(iact.type)) {
-        vegaview.addEventListener('mousemove', (event, item) => {
-          selectEventListener(vegaview, event)
-        })
-
-        vegaview.addEventListener('mouseover', (event, item) => {
-          if (iact.type === "SINGLE") {
-            singleHint()
-          }
-          if (iact.type === "MULTI") {
-            multiHint()
-          }
-        })
-
-        vegaview.addEventListener('mouseout', (event, item) => {
-          document.body.style.cursor = 'default'
-          emptyInteractionHint()
-        })
-      }
-
       vegaview.addDataListener("source_0", (event, item) => { });
       vegaview.addEventListener('click', (event, item) => {
         if (iact.type === "SINGLE") {
