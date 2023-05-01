@@ -80,7 +80,7 @@ export function Circle() {
       if (iact.type === "SINGLE") 
           sel = vl.selectSingle().nearest(true);
       else if (iact.type === "MULTI") 
-          sel = vl.selectMulti().toggle(false).nearest(true);
+          sel = vl.selectMulti().nearest(true);
       else if (iact.type === "BRUSHX") 
           sel = vl.selectInterval().encodings(['x']);
       else if (iact.type === "BRUSHY") 

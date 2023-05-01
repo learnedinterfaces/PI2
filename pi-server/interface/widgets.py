@@ -386,7 +386,7 @@ class Button(Widget):
         for c in node.children:
             if len(c.get_text()) > 30: 
                 return 30000  + len(c.get_text()) ** 2
-        return 140 + 162 * x + len(node.get_text())
+        return 100 * x + len(node.get_text())
 
     @property
     def width(self):
@@ -492,7 +492,7 @@ class Slider(Widget):
         return "slider"
 
     def cost(self):
-        return 570
+        return 300
 
     @property
     def width(self):
@@ -661,7 +661,7 @@ class Dropdown(Widget):
             if len(c.get_text()) > 30: return 30000  + len(c.get_text()) ** 2
         
         if PREFERDROPDOWN: return 0 
-        return 276 + 125 * x + 0.07 * x * x + 0.5*len(node.get_text())
+        return 500 + 0.2*len(node.get_text())
         #return  x + 0.07 * x * x + 0.5*len(node.get_text())
 
     @property

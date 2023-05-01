@@ -1,6 +1,0 @@
-SELECT Horsepower, Miles_per_Gallon FROM cars
-SELECT Horsepower, Miles_per_Gallon FROM cars WHERE Cylinders between 3 and 4
-SELECT Horsepower, Miles_per_Gallon FROM cars WHERE Cylinders between 5 and 8
-SELECT Cylinders, avg(Miles_per_Gallon) as mpg FROM cars GROUP BY Cylinders
-SELECT Acceleration, Miles_per_Gallon FROM cars WHERE Cylinders between 5 and 8
-SELECT Acceleration, Miles_per_Gallon FROM cars WHERE Cylinders between 3 and 6

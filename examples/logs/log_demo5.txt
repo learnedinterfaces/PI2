@@ -1,3 +1,0 @@
-select mpg, disp from cars2 where hp BETWEEN 60 and 120
-select mpg, disp from cars2 where hp BETWEEN 50 and 200
-select mpg, disp from (SELECT * FROM cars2 WHERE orig='USA') where hp BETWEEN 60 and 120
