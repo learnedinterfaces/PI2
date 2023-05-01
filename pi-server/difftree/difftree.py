@@ -181,7 +181,7 @@ class Difftree(object):
                 return None
 
         elif isinstance(node, ANYNode):
-            print("ANYNode.get_text():", node.get_text())
+            #print("ANYNode.get_text():", node.get_text())
             if isinstance(node.node_schema, TypeSchema):
                 text = query.get_text()
                 node.domain.add(text)

@@ -12,6 +12,7 @@ from config import Config
 import time
 import random
 from generalize import *
+import os
 
 max_sample = 5
 
@@ -20,7 +21,7 @@ def generate_ui(queries, catalog, db, pre_generalize):
     random.seed(0)
     # step 1: parse sql queries into trees
     # initialize a parse
-    parser = PIParser("parse_sql/sql.peg", catalog)
+    parser = PIParser(os.path.join(os.path.dirname(os.path.abspath(__file__)), "parse_sql/sql.peg"), catalog)
     trees = []
     sqls = []
     input_difftrees = []
@@ -38,9 +39,7 @@ def generate_ui(queries, catalog, db, pre_generalize):
         except:
             tree = PIDiffParser.parse_difftree(q, compact=True)
             difft = json_to_difftree(tree, catalog, db)
-            print("OK2")
             input_difftrees.append(difft)
-            print("OK3")
 
     now = time.time()
 

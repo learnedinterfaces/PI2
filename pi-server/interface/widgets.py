@@ -500,7 +500,7 @@ class Slider(Widget):
 
     @property
     def height(self):
-        return 20 + 20
+        return 30 + 40
 
     def min_value(self):
         return min([int(c.get_text()) for c in self.node.node_schema.node.children])

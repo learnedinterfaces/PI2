@@ -95,7 +95,7 @@ def runq(msg):
     session.query_log.extend(qs[:-1])
   q = qs[-1]
 
-  db = create_engine("sqlite:///../examples/pi.db")
+  db = create_engine("sqlite:///" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "../examples/pi.db"))
 
   data = []
   keys = ["N/A"]
@@ -146,7 +146,7 @@ def run_pi(session, log, pre_generalize):
   """
   log = list(map(lambda s: " ".join(filter(lambda s: s.strip(), s.strip().split())), log))
 
-  db = Database("../examples/pi.db")
+  db = Database(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../examples/pi.db"))
   catalog = TestCatalogue()
 
   #catalog = DBCatalogue("sqlite:///../examples/pi.db")
@@ -184,7 +184,7 @@ def run_pi(session, log, pre_generalize):
   f(ui.layouts, 0)
 
   Config.record()
-  print(ui.to_spec())
+  #print(ui.to_spec())
   print("Setting up session", session.name)
   session.spec = json.loads(ui.to_spec())
   session.engine = Engine(session.spec)
@@ -258,10 +258,10 @@ if __name__ == "__main__":
       mcts=dict(
         uct_c=10000, 
         iteration_per_merge=20,
-        iteration_number=200,#1000,
+        iteration_number=100,#1000,
         rand_map=5,
         process_number=1,
-        early_stop=20)))
+        early_stop=30)))
     seed = 0
     random.seed(0)
     Config.log_seed(seed)

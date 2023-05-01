@@ -651,22 +651,16 @@ class Table(Visualization):
     @property
     def height(self):
         sample_max_rows = max([len(out.data) for out in self.difftree.sample_outputs])
-        if sample_max_rows == 1:
-            return 70
-        else:
-            return sample_max_rows * 20 + 500
+        return 100 + min(sample_max_rows, 10) * 50
 
     @property
     def width(self):
         sample_max_cols = max([len(out.data.columns) for out in self.difftree.sample_outputs])
-        if sample_max_cols == 1 : 
-            return 150
-        else: 
-            return sample_max_cols * 60
+        return 100 * sample_max_cols
 
     @property
     def cost(self):
-        return 500
+        return 2000
 
     @classmethod
     def candidate_encodings(cls, difft):

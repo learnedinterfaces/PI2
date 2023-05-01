@@ -15,7 +15,10 @@ class Result:
     '''
     def get_by_col_ids(self, cols):
         data = []
+        from IPython import embed
         for c in cols:
+            if c >= len(self.data.columns):
+                embed()
             data.append(tuple(self.data[self.data.columns[c]]))
         data = set([tuple(map(repr, d)) for d in zip(*data)])
         return data
@@ -94,7 +97,7 @@ class TestCatalogue(Catalogue):
              "i": (EType.NUMBER, "quantitative"),
              "z": (EType.NUMBER, "quantitative")}
         self.tables["specObj"] = \
-            {"bestObjID": (EType.NUMBER, "ordinal"),
+            {"objID": (EType.NUMBER, "ordinal"),
              "z": (EType.NUMBER, "quantitative"),
              "ra": (EType.NUMBER, "quantitative"),
              "dec": (EType.NUMBER, "quantitative")}
@@ -115,6 +118,14 @@ class TestCatalogue(Catalogue):
              "Year": (EType.NUMBER, "quantitative"),
              "Origin": (EType.STRING, "ordinal"),
              "Idx": (EType.NUMBER, "key")}
+        self.tables["cars2"] = \
+            {"name": (EType.STRING, "ordinal"),
+             "mpg": (EType.NUMBER, "quantitative"),
+             "disp": (EType.STRING, "quantitative"),
+             "hp": (EType.NUMBER, "quantitative"),
+             "weight": (EType.NUMBER, "quantitative"),
+             "acc": (EType.NUMBER, "quantitative"),
+             "orig": (EType.STRING, "ordinal")}
         self.tables["sp500"] = \
             {"date": (EType.TEMPORAL, "temporal"),
              "price": (EType.NUMBER, "quantitative")}
@@ -144,9 +155,6 @@ class TestCatalogue(Catalogue):
 
         self.func_deps = [
             # [ ([a1, a2], b), ([a3, a4], c) ]
-            ([("flights", "hour")], ("flights", "idx")),
-            ([("flights", "bin_distance")], ("flights", "idx")),
-            ([("flights", "bin_delay")], ("flights", "idx")),
             ([("sales", "date")], ("sales", "total")),
             ([("sales", "city")], ("sales", "total")),
             ([("sp500", "date")], ("sp500", "price")),

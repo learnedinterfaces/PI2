@@ -109,7 +109,6 @@ class Interaction(object):
                         return False
                 return not all_same
             else:
-
                 if node.difftree == self.vis.difftree: return False
                 if node.domain is not None:
                     def to_float(d):

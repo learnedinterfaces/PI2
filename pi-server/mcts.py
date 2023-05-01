@@ -209,11 +209,12 @@ class SingleStepMCTS:
 
         roots, _, _ = self.state
 
-        if 1:
-          print("%s # %s score: %s" % (self.proc, self.n_iters, best_cost))
+        if True:
+          if self.n_iters % 10 == 0:
+            print("%s # %s score: %s" % (self.proc, self.n_iters, best_cost[0]))
         else:
           print("=" * 100)
-          print("%s # %s score: %s" % (self.proc, self.n_iters, best_cost))
+          print("%s # %s score: %s" % (self.proc, self.n_iters, best_cost[0]))
           print("=" * 100)
 
           for tree in roots:

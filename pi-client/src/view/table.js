@@ -44,7 +44,7 @@ export function Table() {
                             cell.innerHTML = view.spec.label[i];
                         }
                     }
-                    for (rd in data.slice(0, 30)) {
+                    for (rd in data.slice(0, 10)) {
                         row = document.createElement("tr");
                         table.appendChild(row);
                         var r = data[rd];
@@ -56,9 +56,9 @@ export function Table() {
                     }
                     view.domEl.innerHTML = "";
                     view.domEl.appendChild(table);
-                    if (data.length > 30) {
+                    if (data.length > 10) {
                         let more = document.createElement("p");
-                        more.innerHTML = (data.length - 30).toString() + " more rows are omitted..."
+                        more.innerHTML = (data.length - 10).toString() + " more rows are omitted..."
                         view.domEl.appendChild(more);
                     }
                 }

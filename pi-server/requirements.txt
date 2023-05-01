@@ -1,5 +1,5 @@
 pandas
-sqlalchemy
+sqlalchemy<2.0
 flask
 openai
 antlr4-python3-runtime==4.12.0

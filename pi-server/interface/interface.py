@@ -4,6 +4,7 @@ from .costpreference import *
 from .interaction import *
 import math
 import time
+import os
 
 COST_NUM = 0
 cost_dist = [[], []]
@@ -206,7 +207,7 @@ class Interface(object):
         db = {}
         db["id"] = "database"
         db["type"] = "db"
-        db["dburi"] = "../examples/pi.db"
+        db["dburi"] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../examples/pi.db")
         backend.append(db)
 
         for difft in self.difftrees:

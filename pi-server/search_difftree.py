@@ -12,6 +12,7 @@ from interface.interface import Interface
 from interface.interaction import Interaction
 import random
 from generalize import *
+from copy import deepcopy
 
 
 class DifftTask(MCTSTask):
@@ -120,7 +121,7 @@ class DifftTask(MCTSTask):
         def collect_node_id(tree):
             nonlocal node_id, duplicate
             if tree.nid in node_id:
-                print("duplicate nid", str(tree))
+                #print("duplicate nid", str(tree))
                 duplicate = True
             node_id.add(tree.nid)
             for c in tree.children:
@@ -225,8 +226,16 @@ def search_difftree(clusters, catalog, sample_outputs, parse_queries, db, pre_ge
             trees.append(tree)
             schemas.append(sqlschema)
     state = (trees, schemas, [hash(tuple([t.chash() for t in trees]))])
+    state2 = deepcopy(state)
 
 
-    searcher = MCTS(state, DifftTask(catalog, sample_outputs, parse_queries,db, pre_generalize))
+    searcher = MCTS(state, DifftTask(catalog, sample_outputs, parse_queries, db, pre_generalize))
     (trees, _, _), score = searcher.play()
+    rule_list.remove(Merge)
+    rule_list.remove(Split)
+    searcher = MCTS(state2, DifftTask(catalog, sample_outputs, parse_queries, db, pre_generalize))
+    (trees2, _, _), score2 = searcher.play()
+    if score2[0] > score[0]:
+        trees = trees2
+        score = score2
     return trees, -score[0]

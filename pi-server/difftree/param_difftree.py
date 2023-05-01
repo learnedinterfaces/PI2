@@ -404,7 +404,7 @@ def sample_queries(tree, catalog, db):
         num_retries -= 1
         assert(num_retries > 0)
         choices = {}
-        tree.print()
+        #tree.print()
         sample = sample_node(tree, qid, history, choices)
         infer_type(sample, catalog)
         query = sample.get_text()
