@@ -153,8 +153,9 @@ if __name__ == "__main__":
     from interface.widgets import *
     from interface.interaction import Interaction, MType, MSpace
 
-    db = Database("../examples/pi.db")
-    catalog = TestCatalogue()
+    db = Database(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../examples/pi.db"))
+    #catalog = TestCatalogue()
+    catalog = DBCatalogue("sqlite:///" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "../examples/pi.db"))
     ui = generate_ui_from_difftree(["select date, Any{cases,deaths} from covid where state=Any{$state: default = 'New York'}"],
                               catalog, db)
 

@@ -661,7 +661,7 @@ class Dropdown(Widget):
             if len(c.get_text()) > 30: return 30000  + len(c.get_text()) ** 2
         
         if PREFERDROPDOWN: return 0 
-        return 500 + 0.2*len(node.get_text())
+        return 335 + 0.2*len(node.get_text())
         #return  x + 0.07 * x * x + 0.5*len(node.get_text())
 
     @property
