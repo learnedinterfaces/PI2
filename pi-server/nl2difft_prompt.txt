@@ -1,3 +1,294 @@
+CREATE TABLE flight(
+"flno" number(4,0) primary key,
+"origin" varchar2(20),
+"destination" varchar2(20),
+"distance" number(6,0),
+"departure_date" date,
+"arrival_date" date,
+"price" number(7,2),
+"aid" number(9,0),
+foreign key("aid") references \`aircraft\`("aid"));
+/*
+Example Rows:
+flno|origin|destination|distance|departure_date|arrival_date|price|aid
+2|Los Angeles|Tokyo|5478|04/12/2005 06:30|04/12/2005 03:55|780.99|9
+7|Los Angeles|Sydney|7487|04/12/2005 05:30|04/12/2005 11:10|278.56|3
+13|Los Angeles|Chicago|1749|04/12/2005 08:45|04/12/2005|08:45|220.98|3
+*/
+CREATE TABLE aircraft(
+"aid" number(9,0) primary key,
+"name" varchar2(30),
+"distance" number(6,0));
+/*
+Example Rows:
+aid|name|distance
+1|Boeing|747-400|8430
+2|Boeing|737-800|3383
+3|Airbus|A340-300|7120
+*/
+-- Using Structurally Parameterized SQL, answer the following questions for the tables provided above.
+-- List all flights departing from Los Angeles
+SELECT flno FROM flight WHERE origin = Any{$origin: default = "Los Angeles"};
+-- List the aircrafts and flight numbers departing from Los Angeles or Chicago over the past week
+SELECT t1.flno, t2.name FROM flight AS t1 JOIN aircraft AS t2 on t1.aid = t2.aid WHERE t1.origin = Any{"Los Angeles"|"Chicago"} AND t1.departure_date >= date(today(), '-7 days');
+-- Show me the total number of departure flights across different cities
+SELECT origin, COUNT(flno) FROM flight GROUP BY origin;
+-- Show me the total number of departure flights in each city
+SELECT origin, COUNT(flno) FROM flight GROUP BY origin;
+-- List the names of the aircrafts arriving at Los Angeles in the past two days
+SELECT DISTINCT t2.name FROM flight AS t1 JOIN aircraft AS t2 on t1.aid = t2.aid WHERE t1.destination = Any{$t1.destination: default = "Los Angeles"} AND t1.arrival_date >= date(today(), '-2 days');
+-- List the names of the aircrafts arriving at Los Angeles in the past two or seven days
+SELECT DISTINCT t2.name FROM flight AS t1 JOIN aircraft AS t2 on t1.aid = t2.aid WHERE t1.destination = Any{$t1.destination: default = "Los Angeles"} AND t1.arrival_date >= Any{date(today(), '-2 days')|date(today(), '-7 days')};
+-- Show me the aircrafts with distance over 5000
+SELECT aid, name FROM aircraft WHERE distance > 5000;
+-- What are the aircrafts with distance around 5000?
+SELECT aid, name FROM aircraft WHERE distance BETWEEN Any{$distance: default = 4900} AND Any{$distance: default = 5100};
+-- Select the aircrafts with distance between 5000 and 7000
+SELECT aid, name FROM aircraft WHERE distance BETWEEN Any{$distance: default = 5000} AND Any{$distance: default = 7000};
+-- Show me the number of flights departing from Los Angeles per day with price around $500.
+SELECT departure_date, COUNT(flno) FROM flight WHERE origin = Any{$origin: default = "Los Angeles"} AND price BETWEEN Any{$price: default = 450} AND Any{$price: default = 550} GROUP BY departure_date;
+CREATE TABLE "musical" (
+"Musical_ID" int,
+"Name" text,
+"Year" int,
+"Award" text,
+"Category" text,
+"Nominee" text,
+"Result" text,
+PRIMARY KEY ("Musical_ID")
+);
+/*
+Example Rows:
+Musical_ID|Name|Year|Award|Category|Nominee|Result
+2|Les Misérables|1986|Tony Award|Best Performance by a Leading Actor in a Musical|Cleavant Derricks|Nominated
+3|Wicked|1986|Tony Award|Best Direction of a Musical|Bob Fosse|Nominated
+4|West Side Story|1986|Tony Award|Best Choreography|Bob Fosse|Won
+*/
+CREATE TABLE "actor" (
+"Actor_ID" int,
+"Name" text,
+"Musical_ID" int,
+"Character" text,
+"Duration" text,
+"age" int,
+PRIMARY KEY ("Actor_ID"),
+FOREIGN KEY ("Musical_ID") REFERENCES "actor"("Actor_ID")
+);
+/*
+Example Rows:
+Actor_ID|Name|Musical_ID|Character|Duration|age
+1|Ray Meagher|1|Alf Stewart|1988—|26
+2|Tom Oliver|1|Lou Carpenter|1988, 1992—|22
+3|Lynne McGranger|2|Irene Roberts|1993—|21
+*/
+-- Using Structurally Parameterized SQL, answer the following questions for the tables provided above.
+-- What are the names of actors who have been in the musical titled The Phantom of the Opera?
+SELECT t1.Name FROM actor AS t1 JOIN musical AS t2 ON T1.Musical_ID  = t2.Musical_ID WHERE t2.Name = Any{$t2.name: default = "The Phantom of the Opera"};
+-- Show the nominees that have nominated musicals for both Tony Award and Drama Desk Award.
+SELECT Nominee FROM musical WHERE Award = Any{$Award: default = "Tony Award"} INTERSECT SELECT Nominee FROM musical WHERE Award = Any{$Award: default = "Drama Desk Award"};
+-- Show the nominees that have nominated musicals for Tony Award or Drama Desk Award.
+SELECT Nominee FROM musical WHERE Award = Any{'Tony Award'|'Drama Desk Award'};
+-- What are the awards won by Ian Smith?
+SELECT t1.Award, t1.Category FROM musical AS t1 JOIN actor AS t2 ON t1.Musical_ID = t2.Musical_ID WHERE t2.Name = Any{$t2.Name: default = "Ian Smith"} AND t1.Result = Any{$t1.Result: default = "won"};
+-- List all actors that are around age 55.
+SELECT Name FROM actor WHERE age BETWEEN Any{$age: default = 50} AND Any{$age: default = 60};
+-- Show me the total number of musical produced across the years
+SELECT Year, COUNT(Musical_ID) FROM musical GROUP BY Year;
+-- Find the number of musicals nominated for Tony Award each year
+SELECT year, COUNT(Musical_ID) FROM musical WHERE Award = Any{$Award: default = "Tony Award"} GROUP BY year;
+-- List the name or character for all actors that performed in The Phantom of the Opera
+SELECT Any{t2.Name|t2.Character} FROM musical AS t1 JOIN actor AS t2 ON t1.Musical_ID = t2.Musical_ID WHERE t1.Name = Any{$t1.name: default = "The Phantom of the Opera"};
+CREATE TABLE \`follows\` (
+\`f1\` int(11) NOT NULL,
+\`f2\` int(11) NOT NULL,
+PRIMARY KEY (\`f1\`,\`f2\`),
+FOREIGN KEY (\`f1\`) REFERENCES \`user_profiles\`(\`uid\`),
+FOREIGN KEY (\`f2\`) REFERENCES \`user_profiles\`(\`uid\`)
+);
+/*
+Example Rows:
+f1|f2
+1|3
+1|5
+2|3
+*/
+CREATE TABLE \`tweets\` (
+\`id\` bigint(20) NOT NULL,
+\`uid\` int(11) NOT NULL,
+\`text\` char(140) NOT NULL,
+\`createdate\` datetime DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (\`id\`),
+FOREIGN KEY (\`uid\`) REFERENCES \`user_profiles\`(\`uid\`)
+);
+/*
+Example Rows:
+id|uid|text|createdate
+1|1|Hello I'm Tony Stark.|2018-03-09 20:00:14
+2|3|Today I have went shopping at Laffayette.|2018-03-09 20:01:02
+4|1|My company is hiring interns.|2018-03-12 02:30:30
+*/
+CREATE TABLE "user_profiles" (
+\`uid\` int(11) NOT NULL,
+\`name\` varchar(255) DEFAULT NULL,
+\`email\` varchar(255) DEFAULT NULL,
+\`partitionid\` int(11) DEFAULT NULL,
+\`followers\` int(11) DEFAULT NULL,
+PRIMARY KEY (\`uid\`)
+);
+/*
+Example Rows:
+uid|name|email|partitionid|followers
+1|Iron Man|ts@richest.com|1|6662425
+2|Mary|Mary@yale.edu|2|890
+3|Black Widow|bw@superhero.com|23|35425845
+*/
+-- Using Structurally Parameterized SQL, answer the following questions for the tables provided above.
+-- Find the name and email of the users who have more than 1000 followers.
+SELECT name, email FROM user_profiles WHERE followers > Any{$followers: default = 1000};
+-- Find the name or email of the users who have around 1000 followers.
+SELECT Any{name|email} FROM user_profiles WHERE followers BETWEEN Any{$followers: default = 950} AND Any{$followers: default = 1050};
+-- How many the users did Taylor Swift follow?
+SELECT COUNT(*) FROM user_profiles AS t1 JOIN follows AS t2 ON t1.uid = t2.f1 JOIN user_profiles AS t3 ON t2.f2 = t3.uid WHERE t1.uid = Any{$t1.uid: default = "Taylor Swift"};
+-- What is the total number of followers for users whose name starts with "Taylor"?
+SELECT SUM(followers) FROM user_profiles WHERE name like 'Taylor%';
+CREATE TABLE "people" (
+    "People_ID" int,
+    "Age" int,
+    "Name" text,
+    "Nationality" text,
+    "Graduation_College" text,
+    PRIMARY KEY ("People_ID")
+);
+/*
+Example Rows:
+People_ID|Age|Name|Nationality|Graduation_College
+1|27|Reggie Lewis|United States|Northeastern
+2|25|Brad Lohaus|United States|Iowa
+3|37|Tom Sheehey|United Kindom|Virginia
+*/
+CREATE TABLE "company" (
+    "Company_ID" real,
+    "Name" text,
+    "Headquarters" text,
+    "Industry" text,
+    "Sales_in_Billion" real,
+    "Profits_in_Billion" real,
+    "Assets_in_Billion" real,
+    "Market_Value_in_Billion" real,
+    PRIMARY KEY ("Company_ID")
+);
+/*
+Example Rows:
+Company_ID|Name|Headquarters|Industry|Sales_in_Billion|Profits_in_Billion|Assets_in_Billion|Market_Value_in_Billion
+1.0|ExxonMobil|USA|Oil and gas|433.5|41.1|331.1|407.4
+2.0|JPMorgan Chase|USA|Banking|110.8|19.0|2265.8|170.1
+3.0|General Electric|USA|Conglomerate|147.3|14.2|717.2|213.7
+*/
+CREATE TABLE "employment" (
+    "Company_ID" int,
+    "People_ID" int,
+    "Year_working" int,
+    PRIMARY KEY ("Company_ID","People_ID"),
+    FOREIGN KEY ("Company_ID") REFERENCES \`company\`("Company_ID"),
+    FOREIGN KEY ("People_ID") REFERENCES \`people\`("People_ID")
+);
+/*
+Example Rows:
+Company_ID|People_ID|Year_working
+7|4|1
+11|3|2
+13|2|3
+*/
+-- Using Structurally Parameterized SQL, answer the following questions for the tables provided above.
+-- How many companies are headquartered in the US?
+SELECT COUNT(*) FROM company WHERE Headquarters = Any{$Headquarters: default ='USA'};
+-- How many companies are headquartered in each country?
+SELECT Headquarters, COUNT(*) FROM company GROUP BY Headquarters;
+-- List the names of the companies with the most sales
+SELECT Name FROM company ORDER BY Sales_in_Billion DESC LIMIT Any{[1,100]: default = 5]};
+-- What are the companies in the banking or retailing industry?
+SELECT Name FROM company WHERE Industry = Any{"Banking"|"Retailing"};
+-- What is the maximum and minimum market value of companies?
+SELECT MAX(Market_Value_in_Billion), MIN(Market_Value_in_Billion) FROM company;
+-- What are the companies with the most employees?
+SELECT T3.Name, COUNT(*) FROM employment AS T1 JOIN people AS T2 ON T1.People_ID = T2.People_ID JOIN company AS T3 ON T1.Company_ID = T3.Company_ID GROUP BY T3.Name ORDER BY COUNT(*) DESC LIMIT Any{[1,100]: default = 5]};
+-- How many employees does JPMorgan Chase have?
+SELECT COUNT(*) FROM employment AS T1 JOIN people AS T2 ON T1.People_ID = T2.People_ID JOIN company AS T3 ON T1.Company_ID = T3.Company_ID WHERE T3.Name = Any{$T3.Name: default = "JPMorgan Chase"};
+-- What are the average sales or profits across the industries?
+SELECT AVG(Any{Sales_in_Billion|Profits_in_Billion}) FROM company GROUP BY Industry;
+-- Show me the companies with around 400 billion sales
+SELECT Name, Sales_in_Billion FROM companies WHERE Sales_in_Billion BETWEEN Any{$Sales_in_Billion: default = 350} AND Any{$Sales_in_Billion: default = 450};
+CREATE TABLE Movie(
+    mID int primary key, 
+    title text, 
+    year int, 
+    director text
+);
+/* 
+Example Rows:
+mID|title|year|director
+101|Gone with the Wind|1939|Victor Fleming
+102|Star Wars|1977|George Lucas
+103|The Sound of Music|1965|Robert Wise
+*/
+CREATE TABLE Reviewer(
+    rID int primary key, 
+    name text
+);
+/*
+Example Rows:
+rID|name
+201|Sarah Martinez
+202|Daniel Lewis
+203|Brittany Harris
+*/
+CREATE TABLE Rating(
+    rID int, 
+    mID int, 
+    stars int, 
+    ratingDate date,
+    FOREIGN KEY (mID) references Movie(mID),
+    FOREIGN KEY (rID) references Reviewer(rID)
+);
+/*
+Example Rows:
+rID|mID|stars|ratingDate
+203|103|2|2011-01-20
+203|108|4|2011-01-12
+203|108|2|2011-01-30
+*/
+-- Using Structurally Parameterized SQL, answer the following questions for the tables provided above.
+-- Find all movies directed by steven spielberg
+SELECT title FROM Movie WHERE director = Any{$director: default = 'Steven Spielberg'};
+-- Show me the titles of the films directed by James Cameron after 2000
+SELECT title FROM Movie WHERE director = Any{$director: default = 'James Cameron'} AND year > Any{$year: default = 2000};
+-- What is the best or worst rating received by each director?
+SELECT T1.director, Any{MAX(T2.stars)|MIN(T2.starts)} FROM Movie AS T1 JOIN Rating AS T2 ON T1.mID = T2.mID GROUP BY T1.director;
+-- What is the average rating for films made by Steven Spielberg?
+SELECT AVG(T2.stars) FROM Movie AS T1 JOIN Rating AS T2 ON T1.mID = T2.mID WHERE T1.director = Any{$T1.director: default = "Steven Spielberg"};
+-- Which director receives the best overall ratings?
+SELECT T1.director, AVG(T2.stars) FROM Movie AS T1 JOIN Rating AS T2 ON T1.mID = T2.mID GROUP BY T1.director ORDER BY AVG(T2.stars) DESC LIMIT 1;
+-- List the titles and directors of movies with a 5 star rating
+SELECT T1.director, T1.title FROM Movie AS T1 JOIN Rating AS T2 ON T1.mID = T2.mID WHERE T2.stars = Any{$T2.stars: default = 5};
+-- What is the best, average, or worst rating star for each reviewer?
+SELECT T2.name, Any{MAX(T1.stars)|AVG(T1.stars)|MIN(T1.stars)} FROM Rating AS T1 JOIN Reviewer AS T2 ON T1.rID = T2.rID GROUP BY T2.name;
+-- What is the average rating stars and title for the oldest movies?
+SELECT avg(T1.stars), T2.title FROM Rating AS T1 JOIN Movie AS T2 ON T1.mID = T2.mID ORDER BY T2.year ASC LIMIT Any{[1,100]: default = 5};
+-- What are the movies and their corresponding ratings reviewed by Chris Jackson?
+SELECT T1.title, T2.stars FROM Movie AS T1 JOIN Rating AS T2 ON T1.mID = T2.mID JOIN Reviewer AS T3 ON T2.rID = T3.rID WHERE T3.name = Any{$T3.name: "Chris Jackson"};
+
+CREATE TABLE "covid" (
+"date" TEXT,
+  "geoid" TEXT,
+  "state" TEXT,
+  "cases" REAL,
+  "cases_avg" REAL,
+  "cases_avg_per_100k" REAL,
+  "deaths" INTEGER,
+  "deaths_avg" REAL,
+  "deaths_avg_per_100k" REAL,
+  "cases_raw" INTEGER
+);
 CREATE TABLE IF NOT EXISTS "states" (
 "state" TEXT,
   "cases" REAL,
