@@ -55,10 +55,6 @@
                   <textarea id="logarea" class="mousetrap" rows="6" style="width:100%"
                             placeholder="Type query"></textarea>
                   <input type="button" onclick="submitQ()" value="submit" style="width: 100%"/>
-                  <label>
-                    <input id ="generalize_toggle" type="checkbox" >
-                        Generalize
-                  </label>
               </div>
           </div>
           <div class="row" style="width: 100%">
@@ -101,9 +97,9 @@
       }
 
       function submitQ() {
-        var q = document.getElementById("logarea").value
-          var generalize = document.getElementById("generalize_toggle").checked
-          socket.emit("generalize",{"payload":generalize,"session":session})
+        var q = document.getElementById("logarea").value;
+          var generalize = false;
+          socket.emit("generalize",{"payload":generalize,"session":session});
         socket.emit("runq", {"payload": q, "session": session})
       }
       function submitLog() {
