@@ -1,6 +1,6 @@
 # PI2: End-to-end Interactive Interface Generation from Queries
 
-> Give me your query log, I will give you an interactive app!
+> Give me your task query, I will give you an interactive interface app!
 
 ## Why PI2? 
 
