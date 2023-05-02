@@ -108,7 +108,7 @@ To
     
     
     
-## Paper and Citation
+# Paper and Citation
 * Yiru Chen, and Eugene Wu. "PI2: End-to-end interactive visualization interface generation from queries." Proceedings of the 2022 International Conference on Management of Data. 2022.
 * Yiru Chen, Ryan Li, Austin Mac, Tianbao Xie, Tao Yu and Eugene Wu. “NL2INTERFACE: Interactive Visualization Interface Generation from Natural Language Queries.” IEEE Visualization Conference NLVIZ Workshop, 2022
 * Jeffrey Tao, Yiru Chen, and Eugene Wu. "Demonstration of PI2: Interactive visualization interface generation for sql analysis in notebook." Proceedings of the 2022 International Conference on Management of Data. 2022.
