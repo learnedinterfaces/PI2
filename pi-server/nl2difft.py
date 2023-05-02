@@ -8,7 +8,6 @@ cache = {}
 def query(question):
     global cache
 
-    #return "select state, sum(Any{cases|death}), geography from states group by state"
     if question in cache:
         return cache[question]
 
