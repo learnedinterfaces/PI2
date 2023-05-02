@@ -1,6 +1,6 @@
 # PI2: End-to-end Interactive Interface Generation from Queries
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 > Give me your task query, I will give you an interactive interface app!
 
