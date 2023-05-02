@@ -1,8 +1,10 @@
-# Precision Interfaces
-
-This is the repo for the Precision Interfaces pipeline.
+# PI2: End-to-end Interactive Interface Generation from Queries
 
 > Give me your query log, I will give you an interactive app!
+
+## Why PI2? 
+
+
 
 The codebase consists of three components:
 
