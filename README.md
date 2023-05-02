@@ -1,13 +1,14 @@
-# PI2: End-to-end Interactive Interface Generation from Queries
+# PI2: End-to-end Interactive Visualization Interface Generation from Queries
 
 [![License](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 > Give me your task query, I will give you an interactive interface app!
 
-Interactive visualization interfaces (or simply interfaces) are critical in nearly every stage of data management—including data cleaning, wrangling, modeling, exploration and communication. It requires considerable expertise and trial-and-error to design and implement an interface. ***PI2 is a system which helps you automatically generate interactive visualization from SQL queries - [the PI2 paper](https://dl.acm.org/doi/pdf/10.1145/3514221.3526166) or Natural Language queries - [the NL2INTERFACE paper](https://arxiv.org/pdf/2209.08834.pdf).*** It helps designers help designers more quickly and effectively translate analysis tasks into interfaces.
- 
+Interactive visualization interfaces (or simply interfaces) are critical in nearly every stage of data management—including data cleaning, wrangling, modeling, exploration and communication. It requires considerable expertise and trial-and-error to design and implement an interface. ***PI2 is a system which helps you automatically generate interactive visualization from SQL queries - [the PI2 paper](https://dl.acm.org/doi/pdf/10.1145/3514221.3526166) and [the demo paper](https://dl.acm.org/doi/pdf/10.1145/3514221.3520153) or Natural Language queries - [the NL2INTERFACE paper](https://arxiv.org/pdf/2209.08834.pdf).*** It helps designers help designers more quickly and effectively translate analysis tasks into interfaces.
 
-# Glance on the DEMO (Sound On)
+[Project Page](https://www.cs.columbia.edu/~chen1ru/Precision%20Interface.html)
+
+# DEMO (Sound On)
 
 https://user-images.githubusercontent.com/13096451/235589850-26987b4f-6b6c-40e9-9a89-8f52afb2e5ea.mp4
 
