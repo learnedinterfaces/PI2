@@ -1,5 +1,7 @@
 # PI2: End-to-end Interactive Interface Generation from Queries
 
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 > Give me your task query, I will give you an interactive interface app!
 
 ## Why PI2? 
