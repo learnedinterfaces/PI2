@@ -1,6 +1,6 @@
 # PI2: End-to-end Interactive Interface Generation from Queries
 
-[![License](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![License](https://commons.wikimedia.org/wiki/File:GPLv3_Logo.svg#/media/File:LGPLv3_Logo.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 > Give me your task query, I will give you an interactive interface app!
 
