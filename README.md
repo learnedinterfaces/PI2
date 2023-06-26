@@ -57,6 +57,16 @@ To run the web demo, start a server locally and visit `https://localhost:8000/`
 
 You can type in queries and PI2 will generate interfaces.  `examples/logs` lists some example queies for your reference. 
 
+For convenience, try these queries.
+
+```
+select mpg, disp from cars2 where hp between 50 and 60
+select mpg, disp from cars2 where hp between 40 and 200
+select mpg, disp from (SELECT * FROM cars2 WHERE orig='USA') where hp between 40 and 200
+select mpg, disp from (SELECT * FROM cars2 WHERE orig='Japan') where hp between 40 and 200
+select hp, count(*) from cars2 group by hp
+```
+
 ## Run Jupyter Lab
 
 To run PI with jupyter lab, you need to start two terminal windows. 
