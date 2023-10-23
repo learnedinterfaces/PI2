@@ -33,7 +33,7 @@ class DB(Backend):
                     d[c] = str(row[c])
                     d[f"${i}"] = str(row[c])
             rows.append(d)
-        print(rows[0] if rows else "null")
+        #print(rows[0] if rows else "null")
         return rows
 
 class Node:

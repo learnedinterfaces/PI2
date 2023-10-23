@@ -3,11 +3,13 @@ import openai
 
 openai.api_key = os.getenv("OPENAI_APIKEY")
 
-cache = {}
+cache = {
+    "What are the total covid cases or deaths across all the states of the U.S.?": "select state, sum(Any{cases|death}), geography from states group by state"
+}
 
 def query(question):
     global cache
-
+    question =' '.join(question.strip().split())
     if question in cache:
         return cache[question]
 
