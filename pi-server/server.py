@@ -147,9 +147,9 @@ def run_pi(session, log, pre_generalize):
   log = list(map(lambda s: " ".join(filter(lambda s: s.strip(), s.strip().split())), log))
 
   db = Database(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../examples/pi.db"))
-  #catalog = TestCatalogue()
+  catalog = TestCatalogue()
 
-  catalog = DBCatalogue("sqlite:///" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "../examples/pi.db"))
+  #catalog = DBCatalogue("sqlite:///" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "../examples/pi.db"))
   ui = generate_ui(log, catalog, db, pre_generalize)
 
   difftrees = "\n".join([t.root.get_text() for t in ui.difftrees])
