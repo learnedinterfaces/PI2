@@ -329,7 +329,7 @@ def sample_node(node, qid, history, choices):
                 choices[node.nid].add(c)
                 return sample_node(node.children[c], qid, history, choices)
             else:
-                c = random.sample(set(range(0, len(node.children))) - history[node.nid] - choices[node.nid], 1)[0]
+                c = random.sample(sorted(set(range(0, len(node.children))) - history[node.nid] - choices[node.nid]), 1)[0]
                 choices[node.nid].add(c)
                 return sample_node(node.children[c], qid, history, choices)
         elif isinstance(node, OPTNode):
